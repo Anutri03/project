@@ -37,6 +37,17 @@ function showNotification(message, type = 'success') {
 function showModal(modalId) {
     document.getElementById(modalId).style.display = 'block';
     document.body.style.overflow = 'hidden';
+    
+    // Fix any QR code URLs when showing share modals
+    if (modalId === 'shareEventModal' || modalId === 'pollQRModal') {
+        console.log("Fixing share URLs in modal:", modalId);
+        // Add a slight delay to ensure the DOM is updated
+        setTimeout(function() {
+            if (window.fixShareLinkUrls) {
+                window.fixShareLinkUrls();
+            }
+        }, 100);
+    }
 }
 
 function closeModal(modalId) {
@@ -1153,6 +1164,13 @@ function shareEvent() {
             level: 'H' // High error correction
         });
         
+        // Double check the shareEventLink value is set correctly
+        const shareLink = document.getElementById('shareEventLink');
+        if (shareLink && shareLink.value !== joinUrl) {
+            console.log("Fixing mismatched share link URL from:", shareLink.value, "to:", joinUrl);
+            shareLink.value = joinUrl;
+        }
+        
         console.log("Event QR code generated successfully");
     } catch (error) {
         console.error("Error generating QR code:", error);
@@ -1265,6 +1283,40 @@ document.addEventListener('DOMContentLoaded', function() {
         currentUser = users[lastLoggedInUser];
         updateUIForLoggedInUser();
     }
+    
+    // Add a custom function to fix QR code URLs that might be in the wrong format
+    window.fixShareLinkUrls = function() {
+        // Check if there's any direct link field visible with incorrect format
+        const shareLink = document.getElementById('shareEventLink');
+        if (shareLink && shareLink.value) {
+            const link = shareLink.value;
+            if (link.includes('/join=')) {
+                console.log("Fixing malformed event share link:", link);
+                // Fix the format: from domain.com/join=CODE to domain.com/project?join=CODE
+                const eventCode = link.split('/join=')[1];
+                const fixedLink = `${window.location.origin}/project?join=${eventCode}`;
+                shareLink.value = fixedLink;
+            }
+        }
+        
+        // Check if there's any poll URL with incorrect format
+        const pollUrl = document.getElementById('pollQRUrl');
+        if (pollUrl && pollUrl.innerText) {
+            const link = pollUrl.innerText;
+            if (link.includes('/poll=')) {
+                console.log("Fixing malformed poll share link:", link);
+                // Extract poll ID and event code
+                const pollId = link.split('/poll=')[1].split('&')[0];
+                const eventCode = link.split('event=')[1];
+                // Fix the format
+                const fixedLink = `${window.location.origin}/project?poll=${pollId}&event=${eventCode}`;
+                pollUrl.innerText = fixedLink;
+            }
+        }
+    };
+    
+    // Fix any existing QR code URLs before they're displayed
+    window.fixShareLinkUrls();
     
     // Check for join parameter in URL
     const urlParams = new URLSearchParams(window.location.search);

@@ -3,28 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0;url=https://anutri03.github.io/project/">
+    <title>Redirecting to Slido Clone</title>
     <script>
         // Parse the URL
         const url = window.location.href;
-        const path = window.location.pathname;
         
-        // Check if this is a QR code join
+        // Check if it contains a join parameter
         if (url.includes('join=')) {
             // Extract the join code
             const joinParam = url.split('join=')[1].split('&')[0];
             
             // Redirect to the project with the join parameter
             window.location.replace(`https://anutri03.github.io/project/?join=${joinParam}`);
-        } 
-        // Check if we're at the root level 404
-        else if (path === '/404.html') {
+        } else {
+            // Otherwise redirect to the main project page
             window.location.replace('https://anutri03.github.io/project/');
-        }
-        // Otherwise try to redirect within the project
-        else {
-            const newPath = path.replace(/^\//, '/project/');
-            window.location.replace(`https://anutri03.github.io${newPath}`);
         }
     </script>
 </head>

@@ -8,6 +8,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D2AA'/><path d='M8 12h16v2H8v-2zm0 4h12v2H8v-2zm0 4h8v2H8v-2z' fill='white'/></svg>">
     
+    <!-- Handle QR code joining -->
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check URL for join parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const joinCode = urlParams.get('join');
+            if (joinCode) {
+                // Set a timeout to make sure the app is loaded
+                setTimeout(function() {
+                    if (document.getElementById('eventCode')) {
+                        document.getElementById('eventCode').value = joinCode;
+                        if (window.showJoinModal) {
+                            window.showJoinModal();
+                        }
+                    }
+                }, 500);
+            }
+        });
+    </script>
+    
     <!-- Load the original app script first -->
     <script src="src/app.js"></script>
     

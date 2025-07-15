@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        // Get the current URL path and query parameters
+        const path = window.location.pathname;
+        const query = window.location.search;
+        const hash = window.location.hash;
+        
+        // Redirect to the index page with the path as a parameter
+        window.location.href = '/project/' + (query ? query : '') + (hash ? hash : '');
+    </script>
+</head>
+<body>
+    <p>Redirecting to homepage...</p>
+</body>
+</html> 

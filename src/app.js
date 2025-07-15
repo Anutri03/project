@@ -1691,8 +1691,48 @@ function initializeDemoData() {
         isActive: true
     };
     
+    // Create a test event with code 2SJ463
+    const testEventCode = '2SJ463';
+    const testEvent = {
+        id: 'test-event-1',
+        code: testEventCode,
+        title: 'Product Launch Planning',
+        description: 'Planning session for the new product launch',
+        createdBy: 'test-user',
+        createdAt: new Date().toISOString(),
+        polls: [
+            {
+                id: 'test-poll-1',
+                question: 'Which feature should we prioritize for the launch?',
+                type: 'multiple-choice',
+                options: [
+                    { id: 'test-opt-1', text: 'User Interface', votes: 10, voters: [] },
+                    { id: 'test-opt-2', text: 'Performance', votes: 15, voters: [] },
+                    { id: 'test-opt-3', text: 'Security', votes: 8, voters: [] }
+                ],
+                isActive: true,
+                createdAt: new Date().toISOString(),
+                settings: {
+                    allowMultipleVotes: false,
+                    hideResults: false
+                }
+            }
+        ],
+        questions: [],
+        quizzes: [],
+        wordClouds: [],
+        participants: [],
+        qaEnabled: true,
+        isActive: true
+    };
+    
     if (!events[demoEventCode]) {
         events[demoEventCode] = demoEvent;
+        saveToStorage();
+    }
+    
+    if (!events[testEventCode]) {
+        events[testEventCode] = testEvent;
         saveToStorage();
     }
 }

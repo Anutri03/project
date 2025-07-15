@@ -1,8 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import AdminLogin from './AdminLogin.js';
-import UserLogin from './UserLogin.js';
-import UserSignup from './UserSignup.js';
+import AdminLogin from './AdminLogin.jsx';
+import UserLogin from './UserLogin.jsx';
+import UserSignup from './UserSignup.jsx';
 // Don't import app.js here, it's loaded directly in HTML
 
 // Wait for the DOM to be ready
@@ -34,14 +34,16 @@ function setupLoginComponent() {
       // Render the React component
       const root = createRoot(loginContainer);
       root.render(
-        <UserLogin onLogin={() => {
-          // Close the modal after successful login
-          window.closeModal('loginModal');
-          // Update UI for logged in user
-          if (window.updateUIForLoggedInUser) {
-            window.updateUIForLoggedInUser();
+        React.createElement(UserLogin, {
+          onLogin: () => {
+            // Close the modal after successful login
+            window.closeModal('loginModal');
+            // Update UI for logged in user
+            if (window.updateUIForLoggedInUser) {
+              window.updateUIForLoggedInUser();
+            }
           }
-        }} />
+        })
       );
     }
   }
@@ -63,10 +65,12 @@ function setupSignupComponent() {
       // Render the React component
       const root = createRoot(signupContainer);
       root.render(
-        <UserSignup onSignup={() => {
-          // Close the modal after successful signup
-          window.closeModal('signupModal');
-        }} />
+        React.createElement(UserSignup, {
+          onSignup: () => {
+            // Close the modal after successful signup
+            window.closeModal('signupModal');
+          }
+        })
       );
     }
   }

@@ -15,8 +15,8 @@
             const joinParam = url.split('join=')[1].split('&')[0];
             console.log('QR code join detected:', joinParam);
             
-            // Redirect to the root with the join parameter (slido.com style)
-            window.location.replace(`https://anutri03.github.io?join=${joinParam}`);
+            // Redirect to the project path with the join parameter (slido.com style)
+            window.location.replace(`https://anutri03.github.io/project?join=${joinParam}`);
         } 
         // Check if this is a QR code for a poll
         else if (url.includes('poll=') && url.includes('event=')) {
@@ -25,8 +25,8 @@
             const eventParam = url.split('event=')[1].split('&')[0];
             console.log('QR code poll detected:', pollId, eventParam);
             
-            // Redirect to the root with poll parameters
-            window.location.replace(`https://anutri03.github.io?poll=${pollId}&event=${eventParam}`);
+            // Redirect to the project path with poll parameters
+            window.location.replace(`https://anutri03.github.io/project?poll=${pollId}&event=${eventParam}`);
         }
         // Check if we're at the root level 404
         else if (path === '/404.html') {

@@ -1088,8 +1088,8 @@ function shareEvent() {
     
     // Update the share modal content
     document.getElementById('shareEventCode').textContent = `#${currentEvent.code}`;
-    // Use slido.com style URL without the trailing slash
-    document.getElementById('shareEventLink').value = `${window.location.origin}?join=${currentEvent.code}`;
+    // Use slido.com style URL with the correct project path
+    document.getElementById('shareEventLink').value = `${window.location.origin}/project?join=${currentEvent.code}`;
     
     // Generate QR code for the event
     const qrContainer = document.getElementById('qrCode');
@@ -1110,8 +1110,8 @@ function shareEvent() {
         canvas.id = 'event-qr-canvas';
         qrContainer.appendChild(canvas);
         
-        // Use slido.com style URL without the trailing slash
-        const joinUrl = `${window.location.origin}?join=${currentEvent.code}`;
+        // Use slido.com style URL with the correct project path
+        const joinUrl = `${window.location.origin}/project?join=${currentEvent.code}`;
         console.log("QR code URL:", joinUrl);
         
         // Generate QR code using QRious library
@@ -1606,8 +1606,8 @@ function showPollQRCode(pollId) {
     
     // Generate a unique poll URL that will open the mobile view when scanned
     const eventCode = currentEvent.code;
-    // Use slido.com style URL without the trailing slash
-    const pollUrl = `${window.location.origin}?poll=${pollId}&event=${eventCode}`;
+    // Use slido.com style URL with the correct project path
+    const pollUrl = `${window.location.origin}/project?poll=${pollId}&event=${eventCode}`;
     document.getElementById('pollQRUrl').textContent = pollUrl;
     
     // Generate QR code using QRious library

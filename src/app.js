@@ -588,14 +588,38 @@ function createPoll(question, options, type = 'multiple-choice', settings = {}) 
 }
 
 function votePoll(pollId, optionId) {
-    const poll = currentEvent.polls.find(p => p.id === pollId);
-    if (!poll) return;
+    console.log(`Voting on poll ${pollId} with option ${optionId}`);
+
+    if (!currentEvent) {
+        console.error("No currentEvent found when voting");
+        showNotification('Event context missing. Please try rejoining the poll.', 'error');
+        return false;
+    }
+    
+    // Find the poll either in current event or across all events
+    let poll = currentEvent.polls.find(p => p.id === pollId);
+    if (!poll) {
+        // If not found in current event, search all events
+        poll = findPollById(pollId);
+    }
+    
+    if (!poll) {
+        console.error(`Poll not found with ID: ${pollId}`);
+        showNotification('Poll not found!', 'error');
+        return false;
+    }
+    
+    if (!currentUser) {
+        console.error("No currentUser found when voting");
+        showNotification('User context missing. Please try again.', 'error');
+        return false;
+    }
     
     // Check if user already voted
     const hasVoted = poll.options.some(option => option.voters.includes(currentUser.id));
     if (hasVoted && !poll.settings.allowMultipleVotes) {
         showNotification('You have already voted in this poll!', 'error');
-        return;
+        return false;
     }
     
     const option = poll.options.find(o => o.id === optionId);
@@ -606,6 +630,11 @@ function votePoll(pollId, optionId) {
         
         renderParticipantPolls();
         showNotification('Vote recorded successfully!');
+        return true;
+    } else {
+        console.error(`Option not found with ID: ${optionId}`);
+        showNotification('Selected option not found!', 'error');
+        return false;
     }
 }
 
@@ -1601,13 +1630,27 @@ function endPoll(pollId) {
 
 // QR Code Functions
 function showPollQRCode(pollId) {
+    console.log(`Generating QR code for poll ID: ${pollId}`);
+    
+    if (!currentEvent) {
+        console.error("No currentEvent found when generating QR code");
+        showNotification('Event context missing!', 'error');
+        return;
+    }
+    
     const poll = currentEvent.polls.find(p => p.id === pollId);
-    if (!poll || !currentEvent) return;
+    if (!poll) {
+        console.error(`Poll not found with ID: ${pollId}`);
+        showNotification('Poll not found!', 'error');
+        return;
+    }
     
     // Generate a unique poll URL that will open the mobile view when scanned
     const eventCode = currentEvent.code;
     // Use slido.com style URL with the correct project path
     const pollUrl = `${window.location.origin}/project?poll=${pollId}&event=${eventCode}`;
+    console.log("Generated poll URL:", pollUrl);
+    
     document.getElementById('pollQRUrl').textContent = pollUrl;
     
     // Generate QR code using QRious library
@@ -1711,16 +1754,39 @@ function toggleTimerSettings() {
 
 // Mobile Poll Functions
 function showMobilePollView(pollId, eventCode) {
-    const poll = findPollById(pollId);
-    const event = findEventByCode(eventCode);
+    console.log(`Showing mobile poll view for pollId: ${pollId}, eventCode: ${eventCode}`);
     
-    if (!poll || !event) {
-        showNotification('Poll or event not found!', 'error');
+    const event = findEventByCode(eventCode);
+    if (!event) {
+        console.error(`Event not found with code: ${eventCode}`);
+        showNotification('Event not found! Please check the code.', 'error');
         return;
     }
     
+    const poll = findPollById(pollId);
+    if (!poll) {
+        console.error(`Poll not found with ID: ${pollId}`);
+        showNotification('Poll not found! Please check the poll ID.', 'error');
+        return;
+    }
+    
+    console.log("Event found:", event.name, "Poll found:", poll.question);
+    
+    // Make sure we set the currentEvent context
+    currentEvent = event;
+    
+    // Create user if not exists
+    if (!currentUser) {
+        currentUser = {
+            id: generateId(),
+            name: 'Guest',
+            isGuest: true
+        };
+        console.log("Created guest user:", currentUser.id);
+    }
+    
     // Set event and poll information
-    document.getElementById('mobilePollEventTitle').textContent = event.name;
+    document.getElementById('mobilePollEventTitle').textContent = event.name || event.title || 'Event';
     document.getElementById('mobilePollEventCode').textContent = `#${event.code}`;
     document.getElementById('mobilePollQuestion').textContent = poll.question;
     
@@ -1777,21 +1843,42 @@ function showMobilePollView(pollId, eventCode) {
     }
     
     // Set up form submission
-    document.getElementById('mobilePollVoteForm').onsubmit = function(e) {
-        e.preventDefault();
+    const voteForm = document.getElementById('mobilePollVoteForm');
+    if (voteForm) {
+        console.log("Setting up mobile vote form submission");
+        voteForm.onsubmit = function(e) {
+            e.preventDefault();
+            console.log("Mobile vote form submitted");
+            
+            const selectedOption = document.querySelector('input[name="mobile-poll-option"]:checked');
+            if (!selectedOption) {
+                console.log("No option selected");
+                showNotification('Please select an option!', 'error');
+                return;
+            }
+            
+            console.log("Selected option:", selectedOption.value);
+            
+            // Submit vote
+            const voteSuccess = votePoll(poll.id, selectedOption.value);
+            
+            if (voteSuccess) {
+                // Show results
+                showMobilePollResults(poll.id);
+            }
+        };
         
-        const selectedOption = document.querySelector('input[name="mobile-poll-option"]:checked');
-        if (!selectedOption) {
-            showNotification('Please select an option!', 'error');
-            return;
+        // Add event listener to the Send button specifically
+        const sendButton = voteForm.querySelector('button[type="submit"]');
+        if (sendButton) {
+            console.log("Adding click listener to Send button");
+            sendButton.addEventListener('click', function() {
+                console.log("Send button clicked directly");
+            });
         }
-        
-        // Submit vote
-        votePoll(poll.id, selectedOption.value);
-        
-        // Show results
-        showMobilePollResults(poll.id);
-    };
+    } else {
+        console.error("Mobile vote form not found in the DOM");
+    }
     
     // Hide all other views and show mobile poll view
     hideAllViews();
@@ -1839,13 +1926,24 @@ function findPollById(pollId) {
     for (const eventCode in events) {
         const event = events[eventCode];
         const poll = event.polls.find(p => p.id === pollId);
-        if (poll) return poll;
+        if (poll) {
+            // Set currentEvent when finding a poll this way
+            if (!currentEvent) {
+                currentEvent = event;
+            }
+            return poll;
+        }
     }
     return null;
 }
 
 function findEventByCode(eventCode) {
-    return events[eventCode] || null;
+    const event = events[eventCode] || null;
+    // Set currentEvent when finding an event this way
+    if (event && !currentEvent) {
+        currentEvent = event;
+    }
+    return event;
 }
 
 // Active Events Functions

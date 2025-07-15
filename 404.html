@@ -47,6 +47,28 @@
             // Redirect to the project path with poll parameters
             window.location.replace(`https://anutri03.github.io/project?poll=${pollId}&event=${eventParam}`);
         }
+        // Check for malformed URL where poll= is in the path
+        else if (path.includes('/poll=')) {
+            // Extract the poll ID and event code from the path
+            const pathParts = path.split('/poll=')[1];
+            const pollId = pathParts.split('&')[0];
+            const eventParam = pathParts.includes('event=') ? pathParts.split('event=')[1].split('&')[0] : null;
+            
+            console.log('Malformed QR code poll detected in path:', pollId, eventParam);
+            
+            // Wait a moment to make sure the console log is visible
+            setTimeout(function() {
+                if (eventParam) {
+                    // Redirect to the properly formatted URL
+                    console.log('Redirecting to properly formatted URL with poll:', pollId, 'and event:', eventParam);
+                    window.location.replace(`https://anutri03.github.io/project?poll=${pollId}&event=${eventParam}`);
+                } else {
+                    // If no event parameter, try to redirect just with the poll
+                    console.log('Redirecting to project with just poll ID:', pollId);
+                    window.location.replace(`https://anutri03.github.io/project?poll=${pollId}`);
+                }
+            }, 100);
+        }
         // Check if we're at the root level 404
         else if (path === '/404.html') {
             window.location.replace('https://anutri03.github.io/project');

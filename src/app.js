@@ -46,6 +46,29 @@ function showModal(modalId) {
             if (window.fixShareLinkUrls) {
                 window.fixShareLinkUrls();
             }
+            
+            // Double check specific elements based on modal type
+            if (modalId === 'shareEventModal' && currentEvent) {
+                const shareLink = document.getElementById('shareEventLink');
+                if (shareLink && (!shareLink.value.includes('/project') || !shareLink.value.includes('?join='))) {
+                    const correctLink = `${window.location.origin}/project?join=${currentEvent.code}`;
+                    console.log("Force fixing shareEventLink to:", correctLink);
+                    shareLink.value = correctLink;
+                }
+            }
+            else if (modalId === 'pollQRModal' && currentEvent) {
+                const pollUrl = document.getElementById('pollQRUrl');
+                if (pollUrl && pollUrl.textContent) {
+                    const pollId = pollUrl.textContent.split('poll=')[1]?.split('&')[0];
+                    const eventCode = currentEvent.code;
+                    
+                    if (pollId && eventCode && (!pollUrl.textContent.includes('/project') || !pollUrl.textContent.includes('?poll='))) {
+                        const correctLink = `${window.location.origin}/project?poll=${pollId}&event=${eventCode}`;
+                        console.log("Force fixing pollQRUrl to:", correctLink);
+                        pollUrl.textContent = correctLink;
+                    }
+                }
+            }
         }, 100);
     }
 }
@@ -75,7 +98,8 @@ function showShareEventModal() {
     if (!currentEvent) return;
     
     document.getElementById('shareEventCode').textContent = `#${currentEvent.code}`;
-    document.getElementById('shareEventLink').value = `${window.location.origin}?join=${currentEvent.code}`;
+    // Use correct URL format with /project path
+    document.getElementById('shareEventLink').value = `${window.location.origin}/project?join=${currentEvent.code}`;
     
     showModal('shareEventModal');
 }
@@ -601,50 +625,81 @@ function createPoll(question, options, type = 'multiple-choice', settings = {}) 
 function votePoll(pollId, optionId) {
     console.log(`Voting on poll ${pollId} with option ${optionId}`);
 
-    if (!currentEvent) {
-        console.error("No currentEvent found when voting");
-        showNotification('Event context missing. Please try rejoining the poll.', 'error');
-        return false;
-    }
-    
-    // Find the poll either in current event or across all events
-    let poll = currentEvent.polls.find(p => p.id === pollId);
-    if (!poll) {
-        // If not found in current event, search all events
-        poll = findPollById(pollId);
-    }
-    
-    if (!poll) {
-        console.error(`Poll not found with ID: ${pollId}`);
-        showNotification('Poll not found!', 'error');
-        return false;
-    }
-    
-    if (!currentUser) {
-        console.error("No currentUser found when voting");
-        showNotification('User context missing. Please try again.', 'error');
-        return false;
-    }
-    
-    // Check if user already voted
-    const hasVoted = poll.options.some(option => option.voters.includes(currentUser.id));
-    if (hasVoted && !poll.settings.allowMultipleVotes) {
-        showNotification('You have already voted in this poll!', 'error');
-        return false;
-    }
-    
-    const option = poll.options.find(o => o.id === optionId);
-    if (option) {
-        option.votes++;
-        option.voters.push(currentUser.id);
-        saveToStorage();
+    try {
+        if (!pollId) {
+            console.error("No pollId provided when voting");
+            showNotification('Poll ID missing. Please try rejoining the poll.', 'error');
+            return false;
+        }
         
-        renderParticipantPolls();
-        showNotification('Vote recorded successfully!');
-        return true;
-    } else {
-        console.error(`Option not found with ID: ${optionId}`);
-        showNotification('Selected option not found!', 'error');
+        if (!optionId) {
+            console.error("No optionId provided when voting");
+            showNotification('Option ID missing. Please select an option and try again.', 'error');
+            return false;
+        }
+
+        if (!currentEvent) {
+            console.error("No currentEvent found when voting");
+            showNotification('Event context missing. Please try rejoining the poll.', 'error');
+            return false;
+        }
+        
+        // Find the poll either in current event or across all events
+        let poll = currentEvent.polls.find(p => p.id === pollId);
+        if (!poll) {
+            // If not found in current event, search all events
+            poll = findPollById(pollId);
+            console.log("Poll not found in current event, searching all events:", poll ? "Found" : "Not found");
+        }
+        
+        if (!poll) {
+            console.error(`Poll not found with ID: ${pollId}`);
+            showNotification('Poll not found! Please try rejoining the event.', 'error');
+            return false;
+        }
+        
+        if (!poll.isActive) {
+            console.error(`Poll ${pollId} is not active`);
+            showNotification('This poll is no longer active.', 'error');
+            return false;
+        }
+        
+        if (!currentUser) {
+            console.error("No currentUser found when voting");
+            showNotification('User context missing. Please try again.', 'error');
+            return false;
+        }
+        
+        // Check if user already voted
+        const hasVoted = poll.options.some(option => option.voters && option.voters.includes(currentUser.id));
+        if (hasVoted && !poll.settings.allowMultipleVotes) {
+            showNotification('You have already voted in this poll!', 'error');
+            return false;
+        }
+        
+        const option = poll.options.find(o => o.id === optionId);
+        if (option) {
+            // Ensure option.voters exists
+            if (!option.voters) {
+                option.voters = [];
+            }
+            
+            option.votes++;
+            option.voters.push(currentUser.id);
+            saveToStorage();
+            
+            renderParticipantPolls();
+            showNotification('Vote recorded successfully!');
+            console.log(`Vote recorded for poll ${pollId}, option ${optionId}, user ${currentUser.id}`);
+            return true;
+        } else {
+            console.error(`Option not found with ID: ${optionId}`);
+            showNotification('Selected option not found!', 'error');
+            return false;
+        }
+    } catch (error) {
+        console.error("Error in votePoll function:", error);
+        showNotification('An error occurred while submitting your vote. Please try again.', 'error');
         return false;
     }
 }
@@ -1290,12 +1345,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const shareLink = document.getElementById('shareEventLink');
         if (shareLink && shareLink.value) {
             const link = shareLink.value;
-            if (link.includes('/join=')) {
+            if (link.includes('/join=') || !link.includes('/project')) {
                 console.log("Fixing malformed event share link:", link);
                 // Fix the format: from domain.com/join=CODE to domain.com/project?join=CODE
-                const eventCode = link.split('/join=')[1];
-                const fixedLink = `${window.location.origin}/project?join=${eventCode}`;
-                shareLink.value = fixedLink;
+                let eventCode;
+                if (link.includes('/join=')) {
+                    eventCode = link.split('/join=')[1].split('&')[0];
+                } else if (link.includes('?join=')) {
+                    eventCode = link.split('?join=')[1].split('&')[0];
+                } else {
+                    // Try to extract code from currentEvent
+                    eventCode = currentEvent?.code;
+                }
+                
+                if (eventCode) {
+                    const fixedLink = `${window.location.origin}/project?join=${eventCode}`;
+                    console.log("Fixed link:", fixedLink);
+                    shareLink.value = fixedLink;
+                }
             }
         }
         
@@ -1303,14 +1370,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const pollUrl = document.getElementById('pollQRUrl');
         if (pollUrl && pollUrl.innerText) {
             const link = pollUrl.innerText;
-            if (link.includes('/poll=')) {
+            if (link.includes('/poll=') || !link.includes('/project')) {
                 console.log("Fixing malformed poll share link:", link);
+                
                 // Extract poll ID and event code
-                const pollId = link.split('/poll=')[1].split('&')[0];
-                const eventCode = link.split('event=')[1];
-                // Fix the format
-                const fixedLink = `${window.location.origin}/project?poll=${pollId}&event=${eventCode}`;
-                pollUrl.innerText = fixedLink;
+                let pollId, eventCode;
+                
+                if (link.includes('/poll=')) {
+                    pollId = link.split('/poll=')[1].split('&')[0];
+                    eventCode = link.includes('event=') ? link.split('event=')[1].split('&')[0] : null;
+                } else if (link.includes('?poll=')) {
+                    pollId = link.split('?poll=')[1].split('&')[0];
+                    eventCode = link.includes('event=') ? link.split('event=')[1].split('&')[0] : null;
+                }
+                
+                if (pollId && eventCode) {
+                    // Fix the format
+                    const fixedLink = `${window.location.origin}/project?poll=${pollId}&event=${eventCode}`;
+                    console.log("Fixed poll link:", fixedLink);
+                    pollUrl.innerText = fixedLink;
+                }
             }
         }
     };
@@ -1898,38 +1977,52 @@ function showMobilePollView(pollId, eventCode) {
     const voteForm = document.getElementById('mobilePollVoteForm');
     if (voteForm) {
         console.log("Setting up mobile vote form submission");
-        voteForm.onsubmit = function(e) {
+        
+        // Clean up any existing event listeners first
+        const newVoteForm = voteForm.cloneNode(true);
+        voteForm.parentNode.replaceChild(newVoteForm, voteForm);
+        
+        // Add new event listener
+        newVoteForm.onsubmit = function(e) {
             e.preventDefault();
             console.log("Mobile vote form submitted");
-            
-            const selectedOption = document.querySelector('input[name="mobile-poll-option"]:checked');
-            if (!selectedOption) {
-                console.log("No option selected");
-                showNotification('Please select an option!', 'error');
-                return;
-            }
-            
-            console.log("Selected option:", selectedOption.value);
-            
-            // Submit vote
-            const voteSuccess = votePoll(poll.id, selectedOption.value);
-            
-            if (voteSuccess) {
-                // Show results
-                showMobilePollResults(poll.id);
-            }
+            submitMobilePollVote(pollId);
         };
         
-        // Add event listener to the Send button specifically
-        const sendButton = voteForm.querySelector('button[type="submit"]');
+        // Add direct click event listener to the Send button
+        const sendButton = newVoteForm.querySelector('button[type="submit"]');
         if (sendButton) {
             console.log("Adding click listener to Send button");
-            sendButton.addEventListener('click', function() {
+            sendButton.addEventListener('click', function(e) {
+                e.preventDefault();
                 console.log("Send button clicked directly");
+                submitMobilePollVote(pollId);
             });
+        } else {
+            console.error("Send button not found in the mobile form");
         }
     } else {
         console.error("Mobile vote form not found in the DOM");
+    }
+    
+    // Helper function for submitting votes from the mobile view
+    function submitMobilePollVote(pollId) {
+        const selectedOption = document.querySelector('input[name="mobile-poll-option"]:checked');
+        if (!selectedOption) {
+            console.log("No option selected");
+            showNotification('Please select an option!', 'error');
+            return;
+        }
+        
+        console.log("Selected option:", selectedOption.value);
+        
+        // Submit vote
+        const voteSuccess = votePoll(pollId, selectedOption.value);
+        
+        if (voteSuccess) {
+            // Show results
+            showMobilePollResults(pollId);
+        }
     }
     
     // Hide all other views and show mobile poll view

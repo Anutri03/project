@@ -1887,17 +1887,62 @@ function toggleTimerSettings() {
 function showMobilePollView(pollId, eventCode) {
     console.log(`Showing mobile poll view for pollId: ${pollId}, eventCode: ${eventCode}`);
     
+    if (!eventCode) {
+        console.error("No event code provided to showMobilePollView");
+        showNotification('Event code missing. Please check the URL.', 'error');
+        document.getElementById('errorMessage').innerHTML = `
+            <div class="error-container">
+                <h3>Event not found! Please check the code.</h3>
+                <p>The URL must include a valid event code.</p>
+                <p>Current URL parameters: poll=${pollId || 'missing'}, event=${eventCode || 'missing'}</p>
+                <a href="/project" class="btn-primary">Go to Home</a>
+            </div>
+        `;
+        return;
+    }
+    
+    if (!pollId) {
+        console.error("No poll ID provided to showMobilePollView");
+        showNotification('Poll ID missing. Please check the URL.', 'error');
+        document.getElementById('errorMessage').innerHTML = `
+            <div class="error-container">
+                <h3>Poll not found! Please check the URL.</h3>
+                <p>The URL must include a valid poll ID.</p>
+                <p>Current URL parameters: poll=${pollId || 'missing'}, event=${eventCode || 'missing'}</p>
+                <a href="/project" class="btn-primary">Go to Home</a>
+            </div>
+        `;
+        return;
+    }
+    
+    // Try to find the event
     const event = findEventByCode(eventCode);
     if (!event) {
         console.error(`Event not found with code: ${eventCode}`);
         showNotification('Event not found! Please check the code.', 'error');
+        document.getElementById('errorMessage').innerHTML = `
+            <div class="error-container">
+                <h3>Event not found! Please check the code.</h3>
+                <p>The event code "${eventCode}" does not match any active events.</p>
+                <p>Available events: ${Object.keys(events).join(', ') || 'None'}</p>
+                <a href="/project" class="btn-primary">Go to Home</a>
+            </div>
+        `;
         return;
     }
     
+    // Try to find the poll
     const poll = findPollById(pollId);
     if (!poll) {
         console.error(`Poll not found with ID: ${pollId}`);
         showNotification('Poll not found! Please check the poll ID.', 'error');
+        document.getElementById('errorMessage').innerHTML = `
+            <div class="error-container">
+                <h3>Poll not found! Please check the poll ID.</h3>
+                <p>The poll ID "${pollId}" does not match any polls in event "${event.title || event.name || eventCode}".</p>
+                <a href="/project" class="btn-primary">Go to Home</a>
+            </div>
+        `;
         return;
     }
     
@@ -1914,6 +1959,11 @@ function showMobilePollView(pollId, eventCode) {
             isGuest: true
         };
         console.log("Created guest user:", currentUser.id);
+    }
+    
+    // Clear any error messages
+    if (document.getElementById('errorMessage')) {
+        document.getElementById('errorMessage').innerHTML = '';
     }
     
     // Set event and poll information
@@ -2067,27 +2117,93 @@ function showMobilePollResults(pollId) {
 
 // Helper functions
 function findPollById(pollId) {
-    // Search through all events for the poll
-    for (const eventCode in events) {
-        const event = events[eventCode];
-        const poll = event.polls.find(p => p.id === pollId);
+    if (!pollId) {
+        console.error("No poll ID provided to findPollById");
+        return null;
+    }
+    
+    console.log(`Searching for poll with ID: ${pollId}`);
+    
+    // First check if we have a current event context
+    if (currentEvent && currentEvent.polls) {
+        const poll = currentEvent.polls.find(p => p.id === pollId);
         if (poll) {
-            // Set currentEvent when finding a poll this way
-            if (!currentEvent) {
-                currentEvent = event;
-            }
+            console.log(`Found poll in current event: ${poll.question}`);
             return poll;
         }
     }
-    return null;
+    
+    // If not found in current event, search all events
+    console.log("Poll not found in current event, searching all events");
+    
+    let foundPoll = null;
+    let foundInEvent = null;
+    
+    // Search through all events for the poll
+    for (const eventCode in events) {
+        const event = events[eventCode];
+        if (!event.polls) continue;
+        
+        const poll = event.polls.find(p => p.id === pollId);
+        if (poll) {
+            foundPoll = poll;
+            foundInEvent = event;
+            console.log(`Found poll in event ${event.code}: ${poll.question}`);
+            break;
+        }
+    }
+    
+    // Set currentEvent when finding a poll this way
+    if (foundPoll && foundInEvent && !currentEvent) {
+        console.log(`Setting current event context to: ${foundInEvent.code}`);
+        currentEvent = foundInEvent;
+    }
+    
+    if (!foundPoll) {
+        console.log("Poll not found in any events");
+    }
+    
+    return foundPoll;
 }
 
 function findEventByCode(eventCode) {
-    const event = events[eventCode] || null;
+    if (!eventCode) {
+        console.error("No event code provided to findEventByCode");
+        return null;
+    }
+    
+    console.log(`Searching for event with code: ${eventCode}`);
+    
+    // Normalize the event code (remove # if present and convert to uppercase)
+    const normalizedCode = eventCode.replace('#', '').toUpperCase();
+    
+    // Try direct lookup first
+    let event = events[normalizedCode] || null;
+    
+    // If not found, try case-insensitive search
+    if (!event) {
+        console.log("Event not found with direct lookup, trying case-insensitive search");
+        for (const code in events) {
+            if (code.toUpperCase() === normalizedCode) {
+                event = events[code];
+                console.log(`Found event with case-insensitive match: ${code}`);
+                break;
+            }
+        }
+    }
+    
+    // Debug output of available events
+    if (!event) {
+        console.log("Available event codes:", Object.keys(events));
+    } else {
+        console.log(`Found event: ${event.title || event.name || 'Untitled'} (${event.code})`);
+    }
+    
     // Set currentEvent when finding an event this way
     if (event && !currentEvent) {
         currentEvent = event;
     }
+    
     return event;
 }
 

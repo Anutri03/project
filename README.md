@@ -17,7 +17,7 @@ A fully-featured interactive audience engagement platform similar to Slido, allo
 
 ## Demo
 
-You can try the live demo at: [https://yourusername.github.io/slido-clone](https://yourusername.github.io/slido-clone)
+You can try the live demo at: [https://Anutri03.github.io/project](https://Anutri03.github.io/project)
 
 ## Local Development
 
@@ -30,8 +30,8 @@ You can try the live demo at: [https://yourusername.github.io/slido-clone](https
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/slido-clone.git
-   cd slido-clone
+   git clone https://github.com/Anutri03/project.git
+   cd project
    ```
 
 2. Start a local server:
@@ -67,7 +67,7 @@ This repository is set up with GitHub Actions to automatically deploy to GitHub 
 
 3. Connect to your GitHub repository:
    ```bash
-   git remote add origin https://github.com/yourusername/slido-clone.git
+   git remote add origin https://github.com/Anutri03/project.git
    git branch -M main
    git push -u origin main
    ```

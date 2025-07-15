@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slido - Audience Interaction Made Easy</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D2AA'/><path d='M8 12h16v2H8v-2zm0 4h12v2H8v-2zm0 4h8v2H8v-2z' fill='white'/></svg>">
+    
+    <!-- Load the original app script first -->
+    <script src="src/app.js"></script>
+    
+    <!-- Then load React app -->
+    <script type="module" src="src/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-left">
+                    <a href="#" class="logo" onclick="goHome()">
+                        <svg width="80" height="32" viewBox="0 0 80 32" fill="none">
+                            <rect width="24" height="24" rx="6" fill="#00D2AA"/>
+                            <path d="M6 10h12v1.5H6V10zm0 3h9v1.5H6V13zm0 3h6v1.5H6V16z" fill="white"/>
+                            <text x="28" y="18" font-family="Inter" font-weight="700" font-size="16" fill="#1E293B">Slido</text>
+                        </svg>
+                    </a>
+                    <div class="nav-menu">
+                        <div class="nav-dropdown">
+                            <a href="#" class="nav-link dropdown-trigger" onclick="return false;">
+                                Features
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                    <path d="M6 8L2 4h8L6 8z"/>
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-section">
+                                    <h4>Audience interaction</h4>
+                                    <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                        <div class="item-icon">📊</div>
+                                        <div>
+                                            <div class="item-title">Live polls</div>
+                                            <div class="item-desc">Get instant feedback</div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                        <div class="item-icon">❓</div>
+                                        <div>
+                                            <div class="item-title">Q&A</div>
+                                            <div class="item-desc">Collect and answer questions</div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                        <div class="item-icon">🎯</div>
+                                        <div>
+                                            <div class="item-title">Quiz</div>
+                                            <div class="item-desc">Test knowledge</div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                        <div class="item-icon">☁️</div>
+                                        <div>
+                                            <div class="item-title">Word cloud</div>
+                                            <div class="item-desc">Visualize responses</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="dropdown-section">
+                                    <h4>Presentation tools</h4>
+                                    <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                        <div class="item-icon">📈</div>
+                                        <div>
+                                            <div class="item-title">Analytics</div>
+                                            <div class="item-desc">Measure engagement</div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                        <div class="item-icon">🔗</div>
+                                        <div>
+                                            <div class="item-title">Integrations</div>
+                                            <div class="item-desc">PowerPoint, Teams, Zoom</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-dropdown">
+                            <a href="#" class="nav-link dropdown-trigger" onclick="return false;">
+                                Use cases
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                    <path d="M6 8L2 4h8L6 8z"/>
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">👥</div>
+                                    <div>
+                                        <div class="item-title">All hands</div>
+                                        <div class="item-desc">Company-wide meetings</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">🏛️</div>
+                                    <div>
+                                        <div class="item-title">Town halls</div>
+                                        <div class="item-desc">Leadership communications</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">💼</div>
+                                    <div>
+                                        <div class="item-title">Team meetings</div>
+                                        <div class="item-desc">Regular team sync</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">🎓</div>
+                                    <div>
+                                        <div class="item-title">Training</div>
+                                        <div class="item-desc">Learning sessions</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">🎤</div>
+                                    <div>
+                                        <div class="item-title">Events</div>
+                                        <div class="item-desc">Conferences & webinars</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <a href="#" class="nav-link" onclick="goHome(); return false;">Integrations</a>
+                        <a href="#" class="nav-link" onclick="goHome(); return false;">Pricing</a>
+                        <div class="nav-dropdown">
+                            <a href="#" class="nav-link dropdown-trigger" onclick="return false;">
+                                Resources
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                    <path d="M6 8L2 4h8L6 8z"/>
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">📚</div>
+                                    <div>
+                                        <div class="item-title">Help center</div>
+                                        <div class="item-desc">Get support</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">📝</div>
+                                    <div>
+                                        <div class="item-title">Blog</div>
+                                        <div class="item-desc">Tips and insights</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">📋</div>
+                                    <div>
+                                        <div class="item-title">Templates</div>
+                                        <div class="item-desc">Ready-to-use polls</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="goHome(); return false;">
+                                    <div class="item-icon">🎥</div>
+                                    <div>
+                                        <div class="item-title">Webinars</div>
+                                        <div class="item-desc">Learn best practices</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-right" id="navRight">
+                    <button class="btn-secondary" onclick="showEventHistory()">History</button>
+                    <button class="btn-secondary" onclick="showLoginModal()">Log in</button>
+                    <button class="btn-primary" onclick="showSignupModal()">Sign up free</button>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <div class="logo">
+                    <svg width="60" height="24" viewBox="0 0 60 24" fill="none">
+                        <rect width="18" height="18" rx="4" fill="#00D2AA"/>
+                        <path d="M4 7h10v1H4V7zm0 2h7v1H4V9zm0 2h5v1H4v-1z" fill="white"/>
+                        <text x="21" y="13" font-family="Inter" font-weight="700" font-size="12" fill="#1E293B">Slido</text>
+                    </svg>
+                </div>
+                <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+            </div>
+            <div class="mobile-menu-links">
+                <a href="#" class="mobile-nav-link" onclick="goHome(); toggleMobileMenu(); return false;">Features</a>
+                <a href="#" class="mobile-nav-link" onclick="goHome(); toggleMobileMenu(); return false;">Use cases</a>
+                <a href="#" class="mobile-nav-link" onclick="goHome(); toggleMobileMenu(); return false;">Integrations</a>
+                <a href="#" class="mobile-nav-link" onclick="goHome(); toggleMobileMenu(); return false;">Pricing</a>
+                <a href="#" class="mobile-nav-link" onclick="goHome(); toggleMobileMenu(); return false;">Resources</a>
+            </div>
+            <div class="mobile-menu-actions">
+                <button class="btn-secondary-full" onclick="showLoginModal(); toggleMobileMenu();">Log in</button>
+                <button class="btn-primary-full" onclick="showSignupModal(); toggleMobileMenu();">Sign up free</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Turn your presentations into<br>
+                        <span class="gradient-text">conversations</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Get your audience engaged and keep them engaged with interactive presentations that encourage participation.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn-primary-large" onclick="showSignupModal()">
+                            Get started for free
+                        </button>
+                        <button class="btn-secondary-large" onclick="showJoinModal()">
+                            Join a Slido
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-value">500+</div>
+                            <div class="stat-label">Events Created</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">10k+</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Satisfaction</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Active Events Section -->
+                    <div class="active-events-container">
+                        <div class="active-events-header">
+                            <h3>Currently Active Events</h3>
+                            <button class="btn-secondary" onclick="refreshActiveEvents()">Refresh</button>
+                        </div>
+                        <div class="active-events-list" id="activeEventsList">
+                            <!-- Active events will be dynamically inserted here -->
+                            <div class="empty-state">
+                                <div class="empty-icon">📅</div>
+                                <h3>No active events</h3>
+                                <p>Create your own event or join an existing one</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="demo-container">
+                        <div class="demo-phone">
+                            <div class="phone-header">
+                                <div class="phone-notch"></div>
+                            </div>
+                            <div class="phone-content">
+                                <div class="slido-interface">
+                                    <div class="interface-header">
+                                        <h3>Marketing Team Meeting</h3>
+                                        <span class="event-code">#2847</span>
+                                    </div>
+                                    <div class="poll-question">
+                                        <h4>What should be our main focus for Q4?</h4>
+                                        <div class="poll-options">
+                                            <div class="poll-option">
+                                                <span class="option-text">Product development</span>
+                                                <div class="option-bar">
+                                                    <div class="option-fill" style="width: 45%"></div>
+                                                </div>
+                                                <span class="option-percent">45%</span>
+                                            </div>
+                                            <div class="poll-option">
+                                                <span class="option-text">Customer acquisition</span>
+                                                <div class="option-bar">
+                                                    <div class="option-fill" style="width: 35%"></div>
+                                                </div>
+                                                <span class="option-percent">35%</span>
+                                            </div>
+                                            <div class="poll-option">
+                                                <span class="option-text">Market expansion</span>
+                                                <div class="option-bar">
+                                                    <div class="option-fill" style="width: 20%"></div>
+                                                </div>
+                                                <span class="option-percent">20%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="floating-elements">
+                            <div class="floating-card card-1">
+                                <div class="card-icon">💡</div>
+                                <span>Live polls</span>
+                            </div>
+                            <div class="floating-card card-2">
+                                <div class="card-icon">❓</div>
+                                <span>Q&A</span>
+                            </div>
+                            <div class="floating-card card-3">
+                                <div class="card-icon">📊</div>
+                                <span>Analytics</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Everything you need to engage your audience</h2>
+                    <p>From live polls to Q&A sessions, Slido has all the tools you need to make your presentations interactive.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#E0F2FE"/>
+                                <path d="M16 20h16v2H16v-2zm0 4h12v2H16v-2zm0 4h8v2H16v-2z" fill="#0284C7"/>
+                            </svg>
+                        </div>
+                        <h3>Live polls</h3>
+                        <p>Get instant feedback from your audience with multiple choice, word cloud, and rating polls.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#ECFDF5"/>
+                                <path d="M24 16c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm-2 12l-3-3 1.4-1.4L22 25.2l5.6-5.6L29 21l-7 7z" fill="#059669"/>
+                            </svg>
+                        </div>
+                        <h3>Q&A</h3>
+                        <p>Let your audience ask questions and vote for the most important ones to be answered.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#FEF3C7"/>
+                                <path d="M24 16l3.09 6.26L34 23.27l-5 4.87L30.18 35 24 31.77 17.82 35 19 28.14l-5-4.87 6.91-1.01L24 16z" fill="#D97706"/>
+                            </svg>
+                        </div>
+                        <h3>Quiz</h3>
+                        <p>Test your audience's knowledge with fun and engaging quizzes with instant results.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#F3E8FF"/>
+                                <path d="M24 16c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z" fill="#7C3AED"/>
+                            </svg>
+                        </div>
+                        <h3>Word cloud</h3>
+                        <p>Visualize audience responses in real-time with beautiful, dynamic word clouds.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#FEE2E2"/>
+                                <path d="M24 16l-4 8h8l-4-8zm-8 16h16v2H16v-2z" fill="#DC2626"/>
+                            </svg>
+                        </div>
+                        <h3>Analytics</h3>
+                        <p>Get detailed insights into audience engagement and participation patterns.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#E0F2FE"/>
+                                <path d="M24 16c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8z" fill="#0284C7"/>
+                            </svg>
+                        </div>
+                        <h3>Integrations</h3>
+                        <p>Works seamlessly with PowerPoint, Google Slides, Zoom, Teams, and more.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integrations Section -->
+        <section class="integrations">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Works with your favorite tools</h2>
+                    <p>Slido integrates seamlessly with the tools you already use.</p>
+                </div>
+                <div class="integrations-grid">
+                    <div class="integration-card">
+                        <div class="integration-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#D73527"/>
+                                <path d="M12 16h16v2H12v-2zm0 4h12v2H12v-2zm0 4h8v2H12v-2z" fill="white"/>
+                            </svg>
+                        </div>
+                        <h4>PowerPoint</h4>
+                        <p>Add-in for seamless integration</p>
+                    </div>
+                    <div class="integration-card">
+                        <div class="integration-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#4285F4"/>
+                                <path d="M12 16h16v2H12v-2zm0 4h12v2H12v-2zm0 4h8v2H12v-2z" fill="white"/>
+                            </svg>
+                        </div>
+                        <h4>Google Slides</h4>
+                        <p>Chrome extension available</p>
+                    </div>
+                    <div class="integration-card">
+                        <div class="integration-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#2D74DA"/>
+                                <path d="M20 12l8 6-8 6-8-6 8-6z" fill="white"/>
+                            </svg>
+                        </div>
+                        <h4>Zoom</h4>
+                        <p>Native app integration</p>
+                    </div>
+                    <div class="integration-card">
+                        <div class="integration-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#6264A7"/>
+                                <path d="M20 12l8 6-8 6-8-6 8-6z" fill="white"/>
+                            </svg>
+                        </div>
+                        <h4>Microsoft Teams</h4>
+                        <p>Built-in app available</p>
+                    </div>
+                    <div class="integration-card">
+                        <div class="integration-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#FF6900"/>
+                                <path d="M20 12l8 6-8 6-8-6 8-6z" fill="white"/>
+                            </svg>
+                        </div>
+                        <h4>Webex</h4>
+                        <p>Direct integration</p>
+                    </div>
+                    <div class="integration-card">
+                        <div class="integration-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#1DB954"/>
+                                <path d="M20 12l8 6-8 6-8-6 8-6z" fill="white"/>
+                            </svg>
+                        </div>
+                        <h4>YouTube Live</h4>
+                        <p>Stream integration</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Trusted by teams worldwide</h2>
+                    <p>See how organizations use Slido to engage their audiences.</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"Slido has transformed our all-hands meetings. The Q&A feature helps us address the most important questions from our team."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" alt="Sarah Johnson">
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name">Sarah Johnson</div>
+                                <div class="author-title">VP of People, TechCorp</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"The live polls keep our training sessions interactive and help us understand what our team needs to learn."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" alt="Michael Chen">
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name">Michael Chen</div>
+                                <div class="author-title">Learning Director, EduTech</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"Slido's analytics help us measure engagement and improve our presentations for better audience connection."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" alt="Emily Rodriguez">
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name">Emily Rodriguez</div>
+                                <div class="author-title">Event Manager, GlobalEvents</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ready to make your presentations interactive?</h2>
+                    <p>Join millions of users who trust Slido to engage their audiences.</p>
+                    <div class="cta-actions">
+                        <button class="btn-primary-large" onclick="showSignupModal()">
+                            Get started for free
+                        </button>
+                        <button class="btn-secondary-large" onclick="showJoinModal()">
+                            Join a Slido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <svg width="80" height="32" viewBox="0 0 80 32" fill="none">
+                                <rect width="24" height="24" rx="6" fill="#00D2AA"/>
+                                <path d="M6 10h12v1.5H6V10zm0 3h9v1.5H6V13zm0 3h6v1.5H6V16z" fill="white"/>
+                                <text x="28" y="18" font-family="Inter" font-weight="700" font-size="16" fill="#64748B">Slido</text>
+                            </svg>
+                        </div>
+                        <p>Make your presentations interactive and engaging with Slido.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M20 10.04C20 4.5 15.5 0 10.04 0S0 4.5 0 10.04c0 5.02 3.66 9.17 8.44 9.9v-7h-2.54v-2.9h2.54V7.85c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34v7C16.34 19.21 20 15.06 20 10.04z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M20 3.8c-.74.33-1.53.55-2.36.65.85-.51 1.5-1.32 1.8-2.28-.79.47-1.67.81-2.6 1-.75-.8-1.82-1.3-3-1.3-2.27 0-4.1 1.84-4.1 4.1 0 .32.04.63.1.93C6.44 6.68 3.42 5.11 1.4 2.62c-.35.6-.55 1.3-.55 2.05 0 1.42.72 2.68 1.82 3.41-.67-.02-1.3-.2-1.85-.5v.05c0 1.99 1.41 3.65 3.28 4.03-.34.09-.7.14-1.07.14-.26 0-.52-.03-.77-.07.52 1.63 2.03 2.82 3.83 2.85-1.4 1.1-3.17 1.76-5.1 1.76-.33 0-.66-.02-.98-.06C1.82 17.69 3.97 18.5 6.29 18.5c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.35-.01-.53.8-.58 1.5-1.3 2.04-2.13z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M18.9 0H1.1C.5 0 0 .5 0 1.1v17.8c0 .6.5 1.1 1.1 1.1h17.8c.6 0 1.1-.5 1.1-1.1V1.1c0-.6-.5-1.1-1.1-1.1zM5.9 17H3V7.5h2.9V17zM4.4 6.2c-.9 0-1.7-.8-1.7-1.7s.8-1.7 1.7-1.7 1.7.8 1.7 1.7-.8 1.7-1.7 1.7zM17 17h-2.9v-4.6c0-1.1 0-2.5-1.5-2.5s-1.7 1.2-1.7 2.4V17H7.9V7.5h2.8v1.3h.04c.4-.8 1.4-1.6 2.8-1.6 3 0 3.6 2 3.6 4.6V17z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-column">
+                            <h4>Product</h4>
+                            <a href="#">Features</a>
+                            <a href="#">Integrations</a>
+                            <a href="#">Pricing</a>
+                            <a href="#">Security</a>
+                            <a href="#">What's new</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Use cases</h4>
+                            <a href="#">All hands</a>
+                            <a href="#">Town halls</a>
+                            <a href="#">Team meetings</a>
+                            <a href="#">Training</a>
+                            <a href="#">Events</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Resources</h4>
+                            <a href="#">Help center</a>
+                            <a href="#">Blog</a>
+                            <a href="#">Templates</a>
+                            <a href="#">Webinars</a>
+                            <a href="#">API docs</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Company</h4>
+                            <a href="#">About us</a>
+                            <a href="#">Careers</a>
+                            <a href="#">Press</a>
+                            <a href="#">Contact</a>
+                            <a href="#">Partners</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Slido. All rights reserved.</p>
+                    <div class="footer-legal">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                        <a href="#">GDPR</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Modals -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign up for free</h2>
+                <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label>Full name</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-primary-full">Create account</button>
+                </form>
+                <div class="modal-divider">
+                    <span>or</span>
+                </div>
+                <button class="btn-google" onclick="googleSignup()">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
+                        <path fill="#34A853" d="M10 20c2.7 0 4.96-.89 6.62-2.41l-3.16-2.45c-.89.59-2.06.94-3.46.94-2.65 0-4.89-1.8-5.69-4.22H1.07v2.52C2.72 17.75 6.09 20 10 20z"/>
+                        <path fill="#FBBC05" d="M4.31 11.86c-.22-.59-.35-1.22-.35-1.86s.13-1.27.35-1.86V5.62H1.07C.39 6.98 0 8.44 0 10s.39 3.02 1.07 4.38l3.24-2.52z"/>
+                        <path fill="#EA4335" d="M10 3.95c1.44 0 2.48.62 3.04 1.14l2.21-2.21C13.96 1.09 12.16 0 10 0 6.09 0 2.72 2.25 1.07 5.62l3.24 2.52C5.11 5.75 7.35 3.95 10 3.95z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                <p class="modal-footer-text">
+                    Already have an account? <a href="#" onclick="closeModal('signupModal'); showLoginModal();" class="link">Log in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Log in to Slido</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn-primary-full">Log in</button>
+                </form>
+                <div class="modal-divider">
+                    <span>or</span>
+                </div>
+                <button class="btn-google" onclick="googleLogin()">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
+                        <path fill="#34A853" d="M10 20c2.7 0 4.96-.89 6.62-2.41l-3.16-2.45c-.89.59-2.06.94-3.46.94-2.65 0-4.89-1.8-5.69-4.22H1.07v2.52C2.72 17.75 6.09 20 10 20z"/>
+                        <path fill="#FBBC05" d="M4.31 11.86c-.22-.59-.35-1.22-.35-1.86s.13-1.27.35-1.86V5.62H1.07C.39 6.98 0 8.44 0 10s.39 3.02 1.07 4.38l3.24-2.52z"/>
+                        <path fill="#EA4335" d="M10 3.95c1.44 0 2.48.62 3.04 1.14l2.21-2.21C13.96 1.09 12.16 0 10 0 6.09 0 2.72 2.25 1.07 5.62l3.24 2.52C5.11 5.75 7.35 3.95 10 3.95z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                <p class="modal-footer-text">
+                    Don't have an account? <a href="#" onclick="closeModal('loginModal'); showSignupModal();" class="link">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="joinModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join a Slido</h2>
+                <button class="modal-close" onclick="closeModal('joinModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="joinForm">
+                    <div class="form-group">
+                        <label>Event code</label>
+                        <input type="text" id="eventCode" placeholder="e.g. #123456" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your name</label>
+                        <input type="text" id="participantName" required>
+                    </div>
+                    <button type="submit" class="btn-primary-full">Join event</button>
+                </form>
+                <div class="join-help">
+                    <p>Need help? <a href="#" class="link">Contact support</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Views -->
+    <div id="presenterDashboard" class="dashboard hidden">
+        <div class="dashboard-header">
+            <div class="dashboard-nav">
+                <div class="dashboard-logo">
+                    <svg width="60" height="24" viewBox="0 0 60 24" fill="none" onclick="goHome()" style="cursor: pointer;">
+                        <rect width="18" height="18" rx="4" fill="#00D2AA"/>
+                        <path d="M4 7h10v1H4V7zm0 2h7v1H4V9zm0 2h5v1H4v-1z" fill="white"/>
+                        <text x="21" y="13" font-family="Inter" font-weight="700" font-size="12" fill="#1E293B">Slido</text>
+                    </svg>
+                </div>
+                
+                <div class="dashboard-menu">
+                    <a href="#" class="dashboard-menu-item" onclick="goHome(); return false;">Features</a>
+                    <a href="#" class="dashboard-menu-item" onclick="goHome(); return false;">Use cases</a>
+                    <a href="#" class="dashboard-menu-item" onclick="goHome(); return false;">Integrations</a>
+                    <a href="#" class="dashboard-menu-item" onclick="goHome(); return false;">Pricing</a>
+                    <a href="#" class="dashboard-menu-item" onclick="goHome(); return false;">Resources</a>
+                </div>
+                
+                <div class="dashboard-user">
+                    <span class="greeting">Hello, <span id="dashboardUserName">anurag</span></span>
+                    <div class="dropdown">
+                        <button class="btn-secondary dropdown-toggle" onclick="showUserProfile()">My Account</button>
+                    </div>
+                    <button class="btn-create" onclick="createNewEvent()">Create slido</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="event-bar">
+            <div class="event-bar-container">
+                <div class="dashboard-title">
+                    <h1 id="dashboardEventTitle">My Event</h1>
+                </div>
+                <div class="event-code-container">
+                    <span class="event-code-label">Event code:</span>
+                    <span class="event-code-value" id="dashboardEventCode">#123456</span>
+                    <button class="btn-share" onclick="shareEvent()">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M13 7a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM13 13a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
+                            <path d="M5.5 8.5L10.5 6M5.5 9.5L10.5 12"/>
+                        </svg>
+                        Share
+                    </button>
+                    <button class="btn-home" onclick="goHome()">Back to home</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-content">
+            <div class="dashboard-sidebar">
+                <div class="sidebar-section">
+                    <h3>AUDIENCE INTERACTION</h3>
+                    <button class="sidebar-btn active" onclick="showPollsSection()" data-section="polls">
+                        <span class="btn-icon">📊</span>
+                        Polls
+                        <span class="badge" id="pollsBadge">0</span>
+                    </button>
+                    <button class="sidebar-btn" onclick="showQASection()" data-section="qa">
+                        <span class="btn-icon">❓</span>
+                        Q&A
+                        <span class="badge" id="qaBadge">0</span>
+                    </button>
+                    <button class="sidebar-btn" onclick="showQuizSection()" data-section="quiz">
+                        <span class="btn-icon">🎯</span>
+                        Quiz
+                        <span class="badge" id="quizBadge">0</span>
+                    </button>
+                    <button class="sidebar-btn" onclick="showWordCloudSection()" data-section="wordcloud">
+                        <span class="btn-icon">☁️</span>
+                        Word cloud
+                        <span class="badge" id="wordcloudBadge">0</span>
+                    </button>
+                </div>
+                <div class="sidebar-section">
+                    <h3>ANALYTICS</h3>
+                    <button class="sidebar-btn" onclick="showAnalyticsSection()" data-section="analytics">
+                        <span class="btn-icon">📈</span>
+                        Live results
+                    </button>
+                    <button class="sidebar-btn" onclick="showParticipantsSection()" data-section="participants">
+                        <span class="btn-icon">👥</span>
+                        Participants
+                        <span class="badge" id="participantsBadge">0</span>
+                    </button>
+                </div>
+            </div>
+            <div class="dashboard-main">
+                <!-- Polls Section -->
+                <div id="pollsSection" class="section-content active">
+                    <div class="section-header">
+                        <h2>Polls</h2>
+                        <div class="section-actions">
+                            <button class="btn-outline" onclick="importPollTemplate()">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4a1 1 0 1 1 2 0v3h3a1 1 0 1 1 0 2H9v3a1 1 0 1 1-2 0V9H4a1 1 0 1 1 0-2h3V4z"/>
+                                </svg>
+                                Templates
+                            </button>
+                            <button class="btn-primary-action" onclick="showCreatePollModal()">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4a1 1 0 1 1 2 0v3h3a1 1 0 1 1 0 2H9v3a1 1 0 1 1-2 0V9H4a1 1 0 1 1 0-2h3V4z"/>
+                                </svg>
+                                Create poll
+                            </button>
+                        </div>
+                    </div>
+                    <div class="polls-list" id="pollsList">
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHg9IjMiIHk9IjEwIiB3aWR0aD0iNCIgaGVpZ2h0PSIxMCIgcng9IjEiIGZpbGw9IiNFMkU4RjAiIC8+CiAgPHJlY3QgeD0iMTAiIHk9IjQiIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiByeD0iMSIgZmlsbD0iI0UyRThGMCIgLz4KICA8cmVjdCB4PSIxNyIgeT0iOCIgd2lkdGg9IjQiIGhlaWdodD0iMTIiIHJ4PSIxIiBmaWxsPSIjRTJFOEYwIiAvPgo8L3N2Zz4KCg==" alt="Polls" />
+                            </div>
+                            <h3>No polls yet</h3>
+                            <p>Create your first poll to start engaging with your audience</p>
+                            <button class="btn-primary" onclick="showCreatePollModal()">Create poll</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q&A Section -->
+                <div id="qaSection" class="section-content">
+                    <div class="section-header">
+                        <h2>Q&A</h2>
+                        <div class="qa-controls">
+                            <label class="toggle">
+                                <input type="checkbox" id="qaEnabled">
+                                <span class="toggle-slider"></span>
+                                Enable Q&A
+                            </label>
+                            <button class="btn-secondary" onclick="moderateQuestions()">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0V4zM8 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                                </svg>
+                                Moderate
+                            </button>
+                        </div>
+                    </div>
+                    <div class="qa-list" id="qaList">
+                        <div class="empty-state">
+                            <div class="empty-icon">❓</div>
+                            <h3>No questions yet</h3>
+                            <p>Enable Q&A to let your audience ask questions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Section -->
+                <div id="quizSection" class="section-content">
+                    <div class="section-header">
+                        <h2>Quiz</h2>
+                        <button class="btn-primary" onclick="showCreateQuizModal()">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4a1 1 0 1 1 2 0v3h3a1 1 0 1 1 0 2H9v3a1 1 0 1 1-2 0V9H4a1 1 0 1 1 0-2h3V4z"/>
+                            </svg>
+                            Create quiz
+                        </button>
+                    </div>
+                    <div class="quiz-list" id="quizList">
+                        <div class="empty-state">
+                            <div class="empty-icon">🎯</div>
+                            <h3>No quizzes yet</h3>
+                            <p>Create your first quiz to test your audience's knowledge</p>
+                            <button class="btn-primary" onclick="showCreateQuizModal()">Create quiz</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Cloud Section -->
+                <div id="wordCloudSection" class="section-content">
+                    <div class="section-header">
+                        <h2>Word cloud</h2>
+                        <button class="btn-primary" onclick="showCreateWordCloudModal()">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4a1 1 0 1 1 2 0v3h3a1 1 0 1 1 0 2H9v3a1 1 0 1 1-2 0V9H4a1 1 0 1 1 0-2h3V4z"/>
+                            </svg>
+                            Create word cloud
+                        </button>
+                    </div>
+                    <div class="wordcloud-list" id="wordCloudList">
+                        <div class="empty-state">
+                            <div class="empty-icon">☁️</div>
+                            <h3>No word clouds yet</h3>
+                            <p>Create your first word cloud to visualize audience responses</p>
+                            <button class="btn-primary" onclick="showCreateWordCloudModal()">Create word cloud</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="analyticsSection" class="section-content">
+                    <div class="section-header">
+                        <h2>Analytics</h2>
+                        <div class="analytics-filters">
+                            <select class="filter-select">
+                                <option>All time</option>
+                                <option>Last 7 days</option>
+                                <option>Last 30 days</option>
+                            </select>
+                            <button class="btn-secondary" onclick="exportAnalytics()">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0V4zM8 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                                </svg>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <div class="analytics-header">
+                                <h3>Engagement</h3>
+                                <span class="analytics-value" id="engagementRate">0%</span>
+                            </div>
+                            <div class="analytics-chart" id="engagementChart"></div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-header">
+                                <h3>Participation</h3>
+                                <span class="analytics-value" id="participationRate">0%</span>
+                            </div>
+                            <div class="analytics-chart" id="participationChart"></div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-header">
+                                <h3>Response time</h3>
+                                <span class="analytics-value" id="responseTime">0s</span>
+                            </div>
+                            <div class="analytics-chart" id="responseChart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participants Section -->
+                <div id="participantsSection" class="section-content">
+                    <div class="section-header">
+                        <h2>Participants</h2>
+                        <div class="participants-actions">
+                            <button class="btn-secondary" onclick="downloadParticipants()">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0V4zM8 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                                </svg>
+                                Download list
+                            </button>
+                        </div>
+                    </div>
+                    <div class="participants-list" id="participantsList">
+                        <div class="empty-state">
+                            <div class="empty-icon">👥</div>
+                            <h3>No participants yet</h3>
+                            <p>Share your event code to get participants</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Participant Dashboard -->
+    <div id="participantDashboard" class="participant-dashboard hidden">
+        <div class="participant-header">
+            <div class="container">
+                <div class="participant-nav">
+                    <div class="participant-info">
+                        <h1 id="participantEventTitle">Event Name</h1>
+                        <span class="participant-event-code" id="participantEventCode">#123456</span>
+                    </div>
+                    <button class="btn-secondary" onclick="goHome()">Back to home</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="participant-content">
+            <div class="container">
+                <div class="participant-tabs">
+                    <button class="tab-btn active" onclick="showParticipantPolls()" data-tab="polls">
+                        <span class="tab-icon">📊</span>
+                        Polls
+                    </button>
+                    <button class="tab-btn" onclick="showParticipantQA()" data-tab="qa">
+                        <span class="tab-icon">❓</span>
+                        Q&A
+                    </button>
+                    <button class="tab-btn" onclick="showParticipantQuiz()" data-tab="quiz">
+                        <span class="tab-icon">🎯</span>
+                        Quiz
+                    </button>
+                    <button class="tab-btn" onclick="showParticipantWordCloud()" data-tab="wordcloud">
+                        <span class="tab-icon">☁️</span>
+                        Word cloud
+                    </button>
+                </div>
+                
+                <div id="participantPollsTab" class="tab-content active">
+                    <div class="participant-waiting-message" id="participantWaitingMessage">
+                        <div class="waiting-icon">⏳</div>
+                        <h3>Waiting for presenter to start a poll</h3>
+                        <p>The poll will appear here automatically</p>
+                    </div>
+                    <div id="participantPollsList" class="participant-polls"></div>
+                </div>
+                
+                <div id="participantQATab" class="tab-content">
+                    <div class="qa-input">
+                        <textarea placeholder="Ask a question..." id="questionInput"></textarea>
+                        <div class="qa-input-footer">
+                            <div class="qa-input-info">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="anonymousQuestion">
+                                    <span class="checkmark"></span>
+                                    Ask anonymously
+                                </label>
+                            </div>
+                            <button class="btn-primary" onclick="submitQuestion()">Send</button>
+                        </div>
+                    </div>
+                    
+                    <div class="qa-filter">
+                        <button class="qa-filter-btn active" data-filter="all" onclick="filterQuestions('all')">All</button>
+                        <button class="qa-filter-btn" data-filter="popular" onclick="filterQuestions('popular')">Popular</button>
+                        <button class="qa-filter-btn" data-filter="answered" onclick="filterQuestions('answered')">Answered</button>
+                        <button class="qa-filter-btn" data-filter="my" onclick="filterQuestions('my')">My Questions</button>
+                    </div>
+                    
+                    <div id="participantQAList" class="participant-qa"></div>
+                </div>
+
+                <div id="participantQuizTab" class="tab-content">
+                    <div id="participantQuizList" class="participant-quiz">
+                        <div class="empty-state">
+                            <div class="empty-icon">🎯</div>
+                            <h3>No active quiz</h3>
+                            <p>Wait for the presenter to start a quiz</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="participantWordCloudTab" class="tab-content">
+                    <div id="participantWordCloudList" class="participant-wordcloud">
+                        <div class="empty-state">
+                            <div class="empty-icon">☁️</div>
+                            <h3>No active word cloud</h3>
+                            <p>Wait for the presenter to start a word cloud</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="participant-footer">
+            <div class="container">
+                <div class="participant-user-info">
+                    <span>Participating as </span>
+                    <span class="participant-name" id="participantName">Anonymous</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Poll Modal -->
+    <div id="createPollModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Create poll</h2>
+                <button class="modal-close" onclick="closeModal('createPollModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createPollForm">
+                    <div class="form-group">
+                        <label>Question</label>
+                        <input type="text" id="pollQuestion" placeholder="What's your question?" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Poll type</label>
+                        <select id="pollType" onchange="handlePollTypeChange()">
+                            <option value="multiple-choice">Multiple choice</option>
+                            <option value="word-cloud">Word cloud</option>
+                            <option value="rating">Rating</option>
+                            <option value="ranking">Ranking</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="optionsGroup">
+                        <label>Options</label>
+                        <div id="pollOptions">
+                            <div class="option-input">
+                                <input type="text" placeholder="Option 1" required>
+                                <button type="button" class="btn-remove" onclick="removeOption(this)">×</button>
+                            </div>
+                            <div class="option-input">
+                                <input type="text" placeholder="Option 2" required>
+                                <button type="button" class="btn-remove" onclick="removeOption(this)">×</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-option" onclick="addOption()">+ Add option</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Timer settings</label>
+                        <div class="form-group-row">
+                            <div class="form-group half">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="enableTimer" onchange="toggleTimerSettings()">
+                                    <span class="checkmark"></span>
+                                    Enable timer
+                                </label>
+                            </div>
+                            <div class="form-group half" id="timerDurationContainer" style="display: none;">
+                                <label>Duration (seconds)</label>
+                                <input type="number" id="timerDuration" min="5" max="300" value="30">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="allowMultipleVotes">
+                            <span class="checkmark"></span>
+                            Allow multiple votes per participant
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="hideResults">
+                            <span class="checkmark"></span>
+                            Hide results until poll ends
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="generateQR" checked>
+                            <span class="checkmark"></span>
+                            Generate QR code for this poll
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('createPollModal')">Cancel</button>
+                        <button type="submit" class="btn-primary">Create poll</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Event Modal -->
+    <div id="shareEventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Share your event</h2>
+                <button class="modal-close" onclick="closeModal('shareEventModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="share-section">
+                    <h3>Event code</h3>
+                    <div class="share-code">
+                        <span class="code-display" id="shareEventCode">#123456</span>
+                        <button class="btn-copy" onclick="copyEventCode()">Copy</button>
+                    </div>
+                    <p>Participants can join at <strong>slido.com</strong> with this code</p>
+                </div>
+                <div class="share-section">
+                    <h3>Direct link</h3>
+                    <div class="share-link">
+                        <input type="text" id="shareEventLink" readonly>
+                        <button class="btn-copy" onclick="copyEventLink()">Copy</button>
+                    </div>
+                </div>
+                <div class="share-section">
+                    <h3>QR Code</h3>
+                    <div class="qr-code" id="qrCode">
+                        <div class="qr-placeholder">
+                            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                                <rect width="120" height="120" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+                                <text x="60" y="65" text-anchor="middle" fill="#64748b" font-size="12">QR Code</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <button class="btn-secondary" onclick="downloadQR()">Download QR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div id="createEventModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>When do you want to use this slido?</h2>
+                <button class="modal-close" onclick="closeModal('createEventModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createEventForm" onsubmit="event.preventDefault(); handleCreateEvent();">
+                    <div class="form-group-row">
+                        <div class="form-group half">
+                            <label>Start date</label>
+                            <input type="date" id="eventStartDate" class="form-control" required>
+                        </div>
+                        <div class="form-group half">
+                            <label>End date</label>
+                            <input type="date" id="eventEndDate" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Give your slido a name</label>
+                        <input type="text" id="eventTitle" class="form-control" placeholder="Slido name" required>
+                    </div>
+                    <div class="form-info">
+                        <div class="info-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 14A6 6 0 1 1 8 2a6 6 0 0 1 0 12z"/>
+                                <path d="M8 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM8 12a1 1 0 0 1-1-1V8a1 1 0 1 1 2 0v3a1 1 0 0 1-1 1z"/>
+                            </svg>
+                        </div>
+                        <span>Anyone with the code or link can participate</span>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('createEventModal')">Cancel</button>
+                        <button type="submit" class="btn-primary">Create slido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Poll QR Code Modal -->
+    <div id="pollQRModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Scan to participate</h2>
+                <button class="modal-close" onclick="closeModal('pollQRModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="poll-qr-container">
+                    <div class="poll-qr-code" id="pollQRCode">
+                        <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                            <rect width="160" height="160" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+                            <text x="80" y="85" text-anchor="middle" fill="#64748b" font-size="14">QR Code</text>
+                        </svg>
+                    </div>
+                    <div class="poll-qr-info">
+                        <p>Participants can scan this code to vote</p>
+                        <p class="poll-qr-url" id="pollQRUrl">https://slido.com/poll/123456</p>
+                    </div>
+                    <button class="btn-secondary" onclick="downloadPollQR()">Download QR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Poll Results Modal -->
+    <div id="pollResultsModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Poll Results</h2>
+                <button class="modal-close" onclick="closeModal('pollResultsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="poll-result-container">
+                    <h3 class="poll-result-title" id="resultPollQuestion">Which feature would you like to see next?</h3>
+                    <p class="poll-result-subtitle">Final results</p>
+                    
+                    <div class="poll-result-options" id="resultPollOptions">
+                        <!-- Results will be dynamically inserted here -->
+                    </div>
+                    
+                    <p class="poll-result-total" id="resultPollTotal">Total votes: 42</p>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-secondary" onclick="closeModal('pollResultsModal')">Close</button>
+                    <button class="btn-primary" onclick="downloadPollResults()">Download Results</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Poll Voting Interface -->
+    <div id="mobilePollView" class="view" style="display: none;">
+        <div class="mobile-poll-header">
+            <div class="container">
+                <div class="mobile-poll-event-info">
+                    <h2 id="mobilePollEventTitle">Event Name</h2>
+                    <p id="mobilePollEventCode" class="mobile-event-code">#123456</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="mobile-poll-container">
+                <div class="mobile-poll-question">
+                    <h3 id="mobilePollQuestion">Poll question appears here</h3>
+                    <div class="mobile-poll-timer-container" id="mobilePollTimerContainer">
+                        <div class="poll-timer" id="mobilePollTimer" data-poll-id="">
+                            <span class="poll-timer-icon">⏱️</span>
+                            <span id="mobilePollTimerValue">00:30</span>
+                        </div>
+                        <div class="poll-timer-text">Time remaining to vote</div>
+                    </div>
+                </div>
+                
+                <form id="mobilePollVoteForm">
+                    <div class="mobile-poll-options" id="mobilePollOptions">
+                        <!-- Options will be dynamically inserted here -->
+                    </div>
+                    <button type="submit" class="btn-primary-full mobile-vote-btn">Send</button>
+                </form>
+                
+                <div class="mobile-poll-footer">
+                    <p>Voting as <span class="mobile-user-name" id="mobileUserName">Anonymous</span></p>
+                </div>
+            </div>
+            
+            <div class="mobile-poll-results" id="mobilePollResults" style="display: none;">
+                <h3>Results</h3>
+                <div class="poll-result-options" id="mobileResultOptions">
+                    <!-- Results will be dynamically inserted here -->
+                </div>
+                <div class="poll-result-total" id="mobileResultTotal">Total votes: 0</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

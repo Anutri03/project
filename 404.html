@@ -14,22 +14,23 @@
             // Extract the join code
             const joinParam = url.split('join=')[1].split('&')[0];
             
-            // Redirect to the project with the join parameter
-            window.location.replace(`https://anutri03.github.io/project/?join=${joinParam}`);
+            // Redirect to the root with the join parameter
+            window.location.replace(`https://anutri03.github.io/?join=${joinParam}`);
         } 
         // Check if we're at the root level 404
         else if (path === '/404.html') {
-            window.location.replace('https://anutri03.github.io/project/');
+            window.location.replace('https://anutri03.github.io/');
         }
-        // Otherwise try to redirect within the project
+        // Otherwise try to redirect within the site
         else {
-            const newPath = path.replace(/^\//, '/project/');
-            window.location.replace(`https://anutri03.github.io${newPath}`);
+            // Remove any potential project prefix
+            const cleanPath = path.replace(/^\/project\//, '/');
+            window.location.replace(`https://anutri03.github.io${cleanPath}`);
         }
     </script>
 </head>
 <body>
     <h1>Redirecting to Slido Clone...</h1>
-    <p>If you are not redirected automatically, <a href="https://anutri03.github.io/project/">click here</a>.</p>
+    <p>If you are not redirected automatically, <a href="https://anutri03.github.io/">click here</a>.</p>
 </body>
 </html> 

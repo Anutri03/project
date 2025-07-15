@@ -9,8 +9,8 @@
         const query = window.location.search;
         const hash = window.location.hash;
         
-        // Redirect to the project page with the query parameters
-        window.location.href = '/project' + (query ? query : '') + (hash ? hash : '');
+        // Redirect to the root directly
+        window.location.href = '/' + (query ? query : '') + (hash ? hash : '');
     </script>
 </head>
 <body>

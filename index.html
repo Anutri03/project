@@ -15,6 +15,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const joinCode = urlParams.get('join');
             if (joinCode) {
+                console.log("QR Code detected:", joinCode);
                 // Set a timeout to make sure the app is loaded
                 setTimeout(function() {
                     if (document.getElementById('eventCode')) {
@@ -23,7 +24,7 @@
                             window.showJoinModal();
                         }
                     }
-                }, 500);
+                }, 1000);
             }
         });
     </script>

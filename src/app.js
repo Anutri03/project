@@ -1088,7 +1088,7 @@ function shareEvent() {
     
     // Update the share modal content
     document.getElementById('shareEventCode').textContent = `#${currentEvent.code}`;
-    document.getElementById('shareEventLink').value = `${window.location.origin}?join=${currentEvent.code}`;
+    document.getElementById('shareEventLink').value = `${window.location.origin}/?join=${currentEvent.code}`;
     
     // Generate QR code for the event
     const qrContainer = document.getElementById('qrCode');
@@ -1102,7 +1102,7 @@ function shareEvent() {
     // Generate QR code using QRious library
     const qr = new QRious({
         element: canvas,
-        value: `${window.location.origin}?join=${currentEvent.code}`,
+        value: `${window.location.origin}/?join=${currentEvent.code}`,
         size: 120,
         backgroundAlpha: 1,
         foreground: '#00D2AA',
@@ -1532,7 +1532,7 @@ function showPollQRCode(pollId) {
     
     // Generate a unique poll URL that will open the mobile view when scanned
     const eventCode = currentEvent.code;
-    const pollUrl = `${window.location.origin}?poll=${pollId}&event=${eventCode}`;
+    const pollUrl = `${window.location.origin}/?poll=${pollId}&event=${eventCode}`;
     document.getElementById('pollQRUrl').textContent = pollUrl;
     
     // Generate QR code using QRious library

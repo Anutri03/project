@@ -10,11 +10,17 @@
         const query = window.location.search;
         const hash = window.location.hash;
         
-        // Redirect to the index page with the path as a parameter
-        window.location.href = '/project/' + (query ? query : '') + (hash ? hash : '');
+        // Check if we're at the root domain with a join parameter
+        if (path === '/' && query.includes('join=')) {
+            // Redirect to the project page with the join parameter
+            window.location.href = '/project' + query + (hash ? hash : '');
+        } else {
+            // Otherwise redirect to the index page with the path as a parameter
+            window.location.href = '/project/' + (query ? query : '') + (hash ? hash : '');
+        }
     </script>
 </head>
 <body>
-    <p>Redirecting to homepage...</p>
+    <p>Redirecting to Slido Clone...</p>
 </body>
 </html> 

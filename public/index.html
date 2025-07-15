@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Slido Clone</title>
+    <script>
+        // Get the current URL query parameters
+        const query = window.location.search;
+        const hash = window.location.hash;
+        
+        // Redirect to the project page with the query parameters
+        window.location.href = '/project' + (query ? query : '') + (hash ? hash : '');
+    </script>
+</head>
+<body>
+    <p>Redirecting to Slido Clone...</p>
+</body>
+</html> 

@@ -1088,26 +1088,47 @@ function shareEvent() {
     
     // Update the share modal content
     document.getElementById('shareEventCode').textContent = `#${currentEvent.code}`;
-    document.getElementById('shareEventLink').value = `${window.location.origin}/?join=${currentEvent.code}`;
+    // Use slido.com style URL without the trailing slash
+    document.getElementById('shareEventLink').value = `${window.location.origin}?join=${currentEvent.code}`;
     
     // Generate QR code for the event
     const qrContainer = document.getElementById('qrCode');
     qrContainer.innerHTML = ''; // Clear previous QR code
     
-    // Create canvas for QR code
-    const canvas = document.createElement('canvas');
-    canvas.id = 'event-qr-canvas';
-    qrContainer.appendChild(canvas);
-    
-    // Generate QR code using QRious library
-    const qr = new QRious({
-        element: canvas,
-        value: `${window.location.origin}/?join=${currentEvent.code}`,
-        size: 120,
-        backgroundAlpha: 1,
-        foreground: '#00D2AA',
-        level: 'H' // High error correction
-    });
+    try {
+        console.log("Generating event QR code");
+        
+        // Check if QRious is available
+        if (typeof QRious === 'undefined') {
+            console.error("QRious library is not loaded!");
+            qrContainer.innerHTML = '<div style="padding: 20px; color: red;">QR code library failed to load. Please refresh and try again.</div>';
+            return;
+        }
+        
+        // Create canvas for QR code
+        const canvas = document.createElement('canvas');
+        canvas.id = 'event-qr-canvas';
+        qrContainer.appendChild(canvas);
+        
+        // Use slido.com style URL without the trailing slash
+        const joinUrl = `${window.location.origin}?join=${currentEvent.code}`;
+        console.log("QR code URL:", joinUrl);
+        
+        // Generate QR code using QRious library
+        const qr = new QRious({
+            element: canvas,
+            value: joinUrl,
+            size: 120,
+            backgroundAlpha: 1,
+            foreground: '#00D2AA',
+            level: 'H' // High error correction
+        });
+        
+        console.log("Event QR code generated successfully");
+    } catch (error) {
+        console.error("Error generating QR code:", error);
+        qrContainer.innerHTML = '<div style="padding: 20px; color: red;">Failed to generate QR code: ' + error.message + '</div>';
+    }
     
     // Show the modal
     showShareEventModal();
@@ -1162,6 +1183,48 @@ function downloadParticipants() {
     showNotification('Participants download feature coming soon!', 'info');
 }
 
+/**
+ * Auto-join an event with the provided code
+ * @param {string} code - The event code to join
+ * @param {string} name - Optional participant name (defaults to "Guest")
+ */
+function autoJoinEvent(code, name = "Guest") {
+    console.log(`Auto-joining event with code: ${code}, name: ${name}`);
+    
+    // Check if the event exists
+    code = code.replace('#', '');
+    const event = events[code];
+    if (!event) {
+        showNotification('Event not found! Please check the code.', 'error');
+        return false;
+    }
+    
+    // Create participant
+    const participantId = generateId();
+    const participant = {
+        id: participantId,
+        name: name,
+        joinedAt: new Date().toISOString(),
+        isPresenter: false,
+        isOnline: true
+    };
+    
+    // Add to event
+    event.participants.push(participant);
+    participants[participantId] = participant;
+    saveToStorage();
+    
+    // Set current context
+    currentEvent = event;
+    currentUser = participant;
+    isPresenter = false;
+    
+    // Show dashboard
+    showParticipantDashboard();
+    showNotification(`Joined "${event.title || event.name}" successfully!`);
+    return true;
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize demo data
@@ -1178,14 +1241,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const joinCode = urlParams.get('join');
     if (joinCode) {
-        document.getElementById('eventCode').value = joinCode;
-        showJoinModal();
+        console.log("Join code detected in URL:", joinCode);
+        
+        // For slido.com style experience, show quick join option
+        if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+            // Show quick join modal
+            showQuickJoinModal(joinCode);
+        } else {
+            // Traditional join modal
+            document.getElementById('eventCode').value = joinCode;
+            showJoinModal();
+        }
     }
     
     // Check for poll parameter in URL (for QR code scanning)
     const pollId = urlParams.get('poll');
     const eventCode = urlParams.get('event');
     if (pollId && eventCode) {
+        console.log("Poll and event detected in URL:", pollId, eventCode);
+        
         // Auto-join as guest if not already logged in
         if (!currentUser) {
             currentUser = {
@@ -1532,27 +1606,44 @@ function showPollQRCode(pollId) {
     
     // Generate a unique poll URL that will open the mobile view when scanned
     const eventCode = currentEvent.code;
-    const pollUrl = `${window.location.origin}/?poll=${pollId}&event=${eventCode}`;
+    // Use slido.com style URL without the trailing slash
+    const pollUrl = `${window.location.origin}?poll=${pollId}&event=${eventCode}`;
     document.getElementById('pollQRUrl').textContent = pollUrl;
     
     // Generate QR code using QRious library
     const qrContainer = document.getElementById('pollQRCode');
     qrContainer.innerHTML = ''; // Clear previous QR code
     
-    // Create canvas for QR code
-    const canvas = document.createElement('canvas');
-    canvas.id = 'qr-canvas';
-    qrContainer.appendChild(canvas);
-    
-    // Generate QR code
-    const qr = new QRious({
-        element: canvas,
-        value: pollUrl,
-        size: 160,
-        backgroundAlpha: 1,
-        foreground: '#00D2AA',
-        level: 'H' // High error correction
-    });
+    try {
+        console.log("Generating QR code for URL:", pollUrl);
+        
+        // Create canvas for QR code
+        const canvas = document.createElement('canvas');
+        canvas.id = 'qr-canvas';
+        qrContainer.appendChild(canvas);
+        
+        // Check if QRious is available
+        if (typeof QRious === 'undefined') {
+            console.error("QRious library is not loaded!");
+            qrContainer.innerHTML = '<div style="padding: 20px; color: red;">QR code library failed to load. Please refresh and try again.</div>';
+            return;
+        }
+        
+        // Generate QR code
+        const qr = new QRious({
+            element: canvas,
+            value: pollUrl,
+            size: 160,
+            backgroundAlpha: 1,
+            foreground: '#00D2AA',
+            level: 'H' // High error correction
+        });
+        
+        console.log("QR code generated successfully");
+    } catch (error) {
+        console.error("Error generating QR code:", error);
+        qrContainer.innerHTML = '<div style="padding: 20px; color: red;">Failed to generate QR code: ' + error.message + '</div>';
+    }
     
     // Show the QR code modal
     showModal('pollQRModal');
@@ -2639,4 +2730,23 @@ function closeEvent(eventCode) {
     if (document.getElementById('activeEventsList')) {
         renderActiveEvents();
     }
+}
+
+function showQuickJoinModal(eventCode) {
+    // Set the event code in the modal
+    document.getElementById('quickJoinEventCode').textContent = eventCode;
+    
+    // Setup form submission
+    const quickJoinForm = document.getElementById('quickJoinForm');
+    if (quickJoinForm) {
+        quickJoinForm.onsubmit = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('quickJoinName').value.trim() || 'Guest';
+            if (autoJoinEvent(eventCode, name)) {
+                closeModal('quickJoinModal');
+            }
+        };
+    }
+    
+    showModal('quickJoinModal');
 }

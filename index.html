@@ -16,15 +16,34 @@
             const joinCode = urlParams.get('join');
             if (joinCode) {
                 console.log("QR Code detected:", joinCode);
-                // Set a timeout to make sure the app is loaded
+                
+                // Auto-join flow like slido.com
+                // First set the event code
                 setTimeout(function() {
                     if (document.getElementById('eventCode')) {
                         document.getElementById('eventCode').value = joinCode;
+                        
+                        // Show join modal
                         if (window.showJoinModal) {
                             window.showJoinModal();
+                            
+                            // Focus on the participant name field
+                            setTimeout(function() {
+                                const nameField = document.getElementById('participantName');
+                                if (nameField) {
+                                    nameField.focus();
+                                }
+                            }, 300);
                         }
                     }
-                }, 1000);
+                }, 500);
+            }
+            
+            // Handle poll direct links
+            const pollId = urlParams.get('poll');
+            const eventCode = urlParams.get('event');
+            if (pollId && eventCode) {
+                console.log("Poll QR Code detected:", pollId, eventCode);
             }
         });
     </script>
@@ -32,9 +51,25 @@
     <!-- Load the original app script first -->
     <script src="src/app.js"></script>
     
+    <!-- Load QR code library first -->
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <script>
+        // Check if QRious loaded properly
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof QRious === 'undefined') {
+                console.error("QRious failed to load - attempting to load alternative source");
+                // Try alternative source if primary fails
+                const script = document.createElement('script');
+                script.src = "https://unpkg.com/qrious@4.0.2/dist/qrious.min.js";
+                document.head.appendChild(script);
+            } else {
+                console.log("QRious loaded successfully");
+            }
+        });
+    </script>
+    
     <!-- Then load React app with type="module" -->
     <script type="module" src="/src/main.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -758,6 +793,28 @@
                 <div class="join-help">
                     <p>Need help? <a href="#" class="link">Contact support</a></p>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Join Modal - For QR code scans -->
+    <div id="quickJoinModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join Event #<span id="quickJoinEventCode"></span></h2>
+                <button class="modal-close" onclick="closeModal('quickJoinModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Continue as guest or enter your name</p>
+                <form id="quickJoinForm">
+                    <div class="form-group">
+                        <input type="text" id="quickJoinName" placeholder="Your name (optional)">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('quickJoinModal')">Cancel</button>
+                        <button type="submit" class="btn-primary">Join Now</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

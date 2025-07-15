@@ -9,17 +9,28 @@
         const url = window.location.href;
         const path = window.location.pathname;
         
-        // Check if this is a QR code join
+        // Check if this is a QR code for joining an event
         if (url.includes('join=')) {
             // Extract the join code
             const joinParam = url.split('join=')[1].split('&')[0];
+            console.log('QR code join detected:', joinParam);
             
-            // Redirect to the root with the join parameter
-            window.location.replace(`https://anutri03.github.io/?join=${joinParam}`);
+            // Redirect to the root with the join parameter (slido.com style)
+            window.location.replace(`https://anutri03.github.io?join=${joinParam}`);
         } 
+        // Check if this is a QR code for a poll
+        else if (url.includes('poll=') && url.includes('event=')) {
+            // Extract the poll ID and event code
+            const pollId = url.split('poll=')[1].split('&')[0];
+            const eventParam = url.split('event=')[1].split('&')[0];
+            console.log('QR code poll detected:', pollId, eventParam);
+            
+            // Redirect to the root with poll parameters
+            window.location.replace(`https://anutri03.github.io?poll=${pollId}&event=${eventParam}`);
+        }
         // Check if we're at the root level 404
         else if (path === '/404.html') {
-            window.location.replace('https://anutri03.github.io/');
+            window.location.replace('https://anutri03.github.io');
         }
         // Otherwise try to redirect within the site
         else {

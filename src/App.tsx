@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { QrCode } from 'lucide-react';
 import AdminLogin from './AdminLogin';
 import CreatePoll from './CreatePoll';
 import PollVote from './PollVote';
@@ -7,6 +8,8 @@ import PollResults from './PollResults';
 import Modal from './Modal';
 import UserSignup from './UserSignup';
 import UserLogin from './UserLogin';
+import EventDashboard from './components/EventDashboard';
+import QRCodeModal from './components/QRCodeModal';
 
 const navLinks = [
   { label: 'Features', page: 'features' },
@@ -17,10 +20,19 @@ const navLinks = [
   { label: 'My Account', page: 'account' },
 ];
 
-function Navbar({ onNavClick, onCreateEvent }: { onNavClick: (page: string) => void, onCreateEvent: () => void }) {
+function Navbar({ 
+  onNavClick, 
+  onCreateEvent, 
+  onShowQR 
+}: { 
+  onNavClick: (page: string) => void, 
+  onCreateEvent: () => void,
+  onShowQR: () => void 
+}) {
   return (
     <nav className="w-full bg-white shadow flex items-center justify-between px-8 py-4 fixed top-0 left-0 z-50">
       <div className="font-bold text-xl text-green-600 flex items-center gap-2">
+        <QrCode size={24} />
         <span>Slido</span>
       </div>
       <div className="flex gap-4 items-center">
@@ -37,6 +49,13 @@ function Navbar({ onNavClick, onCreateEvent }: { onNavClick: (page: string) => v
             {link.label}
           </button>
         ))}
+        <button 
+          className="ml-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium shadow flex items-center gap-2" 
+          onClick={onShowQR}
+        >
+          <QrCode size={16} />
+          QR Code
+        </button>
         <button className="ml-4 bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded font-semibold shadow" onClick={onCreateEvent}>Create slido</button>
       </div>
     </nav>
@@ -102,7 +121,32 @@ function Dashboard() {
 }
 
 function Home() {
-  return <Dashboard />;
+  const [showEventDashboard, setShowEventDashboard] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState({ code: 'DEMO123', name: 'Demo Event' });
+
+  if (showEventDashboard) {
+    return (
+      <EventDashboard
+        eventCode={currentEvent.code}
+        eventName={currentEvent.name}
+        participantCount={0}
+      />
+    );
+  }
+
+  return (
+    <div className="w-full max-w-6xl">
+      <Dashboard />
+      <div className="mt-8 text-center">
+        <button
+          onClick={() => setShowEventDashboard(true)}
+          className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium"
+        >
+          View Event Dashboard (Demo)
+        </button>
+      </div>
+    </div>
+  );
 }
 
 function AdminLoginWithRedirect() {
@@ -117,6 +161,7 @@ function App() {
   const [endDate, setEndDate] = useState('');
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
   const [comingSoonPage, setComingSoonPage] = useState('');
+  const [showQRModal, setShowQRModal] = useState(false);
 
   const handleCreateEvent = () => setModalOpen(true);
   const handleModalClose = () => {
@@ -137,11 +182,16 @@ function App() {
     setComingSoonOpen(true);
   };
   const handleComingSoonClose = () => setComingSoonOpen(false);
+  const handleShowQR = () => setShowQRModal(true);
 
   return (
     <Router>
       <div className="min-h-screen bg-gray-100 pt-[120px] flex flex-col items-center">
-        <Navbar onNavClick={handleNavClick} onCreateEvent={handleCreateEvent} />
+        <Navbar 
+          onNavClick={handleNavClick} 
+          onCreateEvent={handleCreateEvent}
+          onShowQR={handleShowQR}
+        />
         <Modal open={modalOpen} onClose={handleModalClose}>
           <form onSubmit={handleModalSubmit} className="flex flex-col gap-6 min-w-[320px]">
             <h2 className="text-2xl font-bold text-center mb-2">When do you want to use this slido?</h2>
@@ -176,6 +226,15 @@ function App() {
             <button className="px-4 py-2 rounded bg-green-500 text-white" onClick={handleComingSoonClose}>Close</button>
           </div>
         </Modal>
+        
+        <QRCodeModal
+          isOpen={showQRModal}
+          onClose={() => setShowQRModal(false)}
+          eventCode="DEMO123"
+          eventName="Demo Event"
+          type="event"
+        />
+        
         <div className="w-full flex justify-center">
           <Routes>
             <Route path="/" element={<Home />} />
